@@ -10,20 +10,17 @@ describe('generateID()', () => {
   })
 })
 
-describe('addItemToArray()', () => {
+describe.concurrent('addItemToArray()', () => {
   // AAA : Arrange Act Assert
   /// Arrange data (or mock data)
-  let items = null;
-  let newItem = null;
-
   // Initialiser les variables avant l'exécution de chaque test
-  beforeEach(() => {
+  beforeEach((context) => {
     console.log( 'beforeEach');
-    items = [{id: 1}, {id: 2}];
-    newItem = {id: 3};
+    context.items = [{id: 1}, {id: 2}];
+    context.newItem = {id: 3};
   })
 
-  test('Should return a new array with a new item', () => {
+  test('Should return a new array with a new item', ({ items, newItem }) => {
     /// Act with data
     let result = addItemToArray(items, newItem);
   
@@ -31,7 +28,7 @@ describe('addItemToArray()', () => {
     expect(result).toEqual([...items, newItem]);
   })
 
-  test('Should not change the origin array', () => {  
+  test('Should not change the origin array', ({ items, newItem }) => {  
     /// Act with data
     addItemToArray(items, newItem);
     // items.push({id: 4});
@@ -41,25 +38,23 @@ describe('addItemToArray()', () => {
   })
 
   // How to expect an error
-  test('should throw error if not an array', () => {
+  test('should throw error if not an array', ({newItem}) => {
     expect(() => addItemToArray(null, newItem)).toThrowError('iterable');
   })
 })
 
 
-describe('removeItemFromArray()', () => {
+describe.concurrent('removeItemFromArray()', () => {
   // AAA : Arrange Act Assert
   /// Arrange data (or mock data)
-  let items = null;
-  let itemToRemove = null;
-
   // Initialiser les variables avant l'exécution de chaque test
-  beforeEach(() => {
+  beforeEach((context) => {
     console.log( 'beforeEach');
-    items = [{id: 1}, {id: 2}];
-    itemToRemove = items[0];
+    context.items = [{id: 1}, {id: 2}];
+    context.itemToRemove = context.items[0];
   })
-  test('Should return a new array with an item removed', () => {  
+
+  test('Should return a new array with an item removed', ({ items, itemToRemove }) => {  
     /// Act with data
     let result = removeItemFromArray(items, itemToRemove);
   
@@ -67,7 +62,7 @@ describe('removeItemFromArray()', () => {
     expect(result).toHaveLength(1);
   })
 
-  test('Should not change the origin array', () => {  
+  test('Should not change the origin array', ({ items, itemToRemove }) => {  
     /// Act with data
     removeItemFromArray(items, itemToRemove);
   
@@ -99,36 +94,7 @@ describe('removeItemFromArray()', () => {
 // describe.only()
 
 
-// Tester une fonction asynchrone
-function returnValueAfterPause(value) {
-  return new Promise((resolve, reject) => {
-    setTimeout(resolve(value), 500)
-  })
-}
 
-describe('returnValueAfterPause()', () => {
-  test('Should resolve after a pause', async () => {
-    /// Arrange data
-    const data = {id: 1};
-
-    /// Act with data
-    const promiseResult = returnValueAfterPause(data);
-
-    /// Assert
-    await expect(promiseResult).resolves.toEqual(data);
-  })
-
-  test.skip('Should not resolve after a pause', async () => {
-    /// Arrange data
-    const data = {id: 1};
-
-    /// Act with data
-    const promiseResult = returnValueAfterPause(data);
-
-    /// Assert
-    await expect(promiseResult).rejects.toEqual(data);
-  })
-})
 
 
 
